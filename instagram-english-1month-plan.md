@@ -57,15 +57,18 @@
 - 비중은 부록 28개 주제 기준으로 계산 (15÷28=53.6%, 5÷28=17.9%, 8÷28=28.6%). 캐러셀 비중을 높게 둔 이유: 여행 표현은 **여행 중 다시 꺼내 보는 용도**라 저장 가치가 크다고 판단. 이것도 가설이며 저장률로 검증합니다.
 - 비중 %는 시작값이며, 2주 차부터 **실제 공유율·저장률 데이터**로 조정합니다.
 
-### 미국식 vs 영국식 표기 원칙
-같은 상황에서도 표현이 다른 경우가 있으므로 영상에 한 줄로 병기합니다.
+### 영어 기준: 미국식 (American English)
+모든 콘텐츠의 표현·철자·단어 선택을 미국식으로 통일합니다. 영국식은 기본적으로 넣지 않고, 영국식을 쓰는 여행지 질문이 들어올 때만 별도 콘텐츠로 다룹니다.
 
-| 상황 | 미국 | 영국 |
+| 상황 | 이 계정에서 쓰는 표현 (미국식) | 참고: 영국식 (콘텐츠에는 넣지 않음) |
 |------|------|------|
-| 포장 | `To go, please.` | `Takeaway, please.` |
-| 계산서 | `Can I get the check?` | `Can I have the bill?` |
-| 지하철 | `subway` | `underground` / `tube`(런던) |
-| 화장실 | `restroom` / `bathroom` | `toilet(s)` |
+| 포장 | `To go, please.` | takeaway |
+| 계산서 | `Can I get the check?` | bill |
+| 지하철 | `subway` | underground / tube(런던) |
+| 화장실 | `restroom` / `bathroom` | toilet(s) |
+| 휴대폰 | `cell phone` | mobile phone |
+| 줄 | `line` (`Is this the line for ~?`) | queue |
+| 철자 | color, center | colour, centre |
 
 ### 릴스 기본 구조 (모든 영상 공통)
 1. **0–2초 훅**: 상황 + 문제 제기. 예) "호텔 체크인할 때 첫마디, 이거 하나면 끝"
@@ -168,7 +171,7 @@
 |---|-----|------|------|-----------|
 | 1 | D3 | A | 탑승 수속 | `Can I get a window seat?` / `an aisle seat` |
 | 2 | D4 | C | 공항 필수 단어 | boarding pass, gate, carry-on, checked bag, layover, boarding time |
-| 3 | D5 | B | 콩글리시 ① | ❌ hand phone → ⭕ cell phone(미) / mobile phone(영), ❌ notebook(노트북 컴퓨터) → ⭕ laptop |
+| 3 | D5 | B | 콩글리시 ① | ❌ hand phone → ⭕ cell phone, ❌ notebook(노트북 컴퓨터) → ⭕ laptop |
 | 4 | D6 | A | 기내 서비스 | `Could I get some water, please?` / `Chicken or beef?` → `Chicken, please.` |
 | 5 | D7 | C | 기내 한 문장 모음 | `I think you're in my seat.` / `Could I get a blanket?` / `Can I recline my seat?` 등 |
 | 6 | D8 | B | 못 알아들었을 때 | ❌ `What?` (퉁명스럽게 들릴 수 있음) → ⭕ `Sorry?` / `Could you say that again?` |
@@ -186,9 +189,9 @@
 | 18 | D20 | C | 호텔 표현 모음 | 체크인·짐 보관·수건 요청·Wi-Fi(`What's the Wi-Fi password?`) |
 | 19 | D21 | A | 식당 입장 | `Table for two, please.` / `Do you have a reservation?` → `No, we don't.` |
 | 20 | D22 | A | 주문 | `What do you recommend?` / `I'll have this one.` |
-| 21 | D23 | B | 미국 vs 영국 | `check` vs `bill`, `to go` vs `takeaway` (2장 표 참고) |
+| 21 | D23 | B | 화장실 묻기 | ❌ `Where is the toilet?` (미국에서는 toilet이 변기 자체를 가리키는 경우가 많아 직설적으로 들릴 수 있음) → ⭕ `Where's the restroom?` |
 | 22 | D24 | A | 카페 | `Can I get an iced Americano?` / `For here or to go?` |
-| 23 | D25 | C | 식당·카페 표현 모음 | 주문·추가 요청·계산(`Can we pay separately?`) |
+| 23 | D25 | C | 식당·카페 표현 모음 | 주문·추가 요청·계산(`Can I get the check?` / `Can we pay separately?`) |
 | 24 | D26 | A | 쇼핑 | `I'm just looking, thanks.` / `Can I try this on?` |
 | 25 | D27 | C | 쇼핑 표현 모음 | `Do you have this in a smaller size?` / `Can I pay by card?` |
 | 26 | D28 | A | 관광 | `Could you take a picture of us?` / `What time does it close?` |
