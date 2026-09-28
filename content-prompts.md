@@ -73,7 +73,7 @@
 오늘 콘텐츠: Day {D번호} / 주제 #{번호}
 - 주제: {예: 콩글리시 — hand phone, notebook}
 - ❌ 틀리기 쉬운 표현: {예: hand phone}
-- ⭕ 자연스러운 표현: {예: cell phone(미) / mobile phone(영)}
+- ⭕ 자연스러운 표현: {예: cell phone}
 - 영상 길이 목표: 15~30초
 
 아래 형식으로 릴스 대본을 써줘.
