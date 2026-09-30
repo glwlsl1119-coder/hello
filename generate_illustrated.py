@@ -8,12 +8,13 @@ All characters are drawn from scratch with Pillow (no external artwork).
 Optional handwriting fonts (Caveat, Patrick Hand) are used if present in ./fonts,
 otherwise the script falls back to fonts installed on the system.
 """
+import csv
 import math
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-from generate import QUOTES, HANDLE
+from generate import QUOTES, HANDLE, HASH
 
 W, H, S = 1080, 1350, 2  # S = supersampling factor
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -42,6 +43,17 @@ def mix(a, b, t):
 
 
 WHITE = (255, 255, 255)
+
+# Series cast (see PLAN.md). Plush style always features the bear with its baby.
+NAMES = {"bear": "Momo", "cat": "Miso", "dog": "Mochi"}
+GRID_ANIMALS = ["cat", "dog", "bear"]
+BLOCK_ANIMALS = ["dog", "cat", "bear"]
+
+
+def animal_for(i):
+    """Which character appears on day i+1 (i is 0-based)."""
+    style, v = i % 3, i // 3
+    return ["bear", GRID_ANIMALS[v % 3], BLOCK_ANIMALS[v % 3]][style]
 
 
 class Cv:
@@ -271,6 +283,7 @@ def style_plush(q, a, v):
     heart(cv, 170, 760, 14, acc)
     cv.text(W / 2, 62, HANDLE, font(ROUND, 28), mix(txt, bg, .35), "mt", 1 if REAL_ROUND else 0)
     stroke = 1.2 if REAL_ROUND else 0
+    cv.text(W / 2, 108, "Momo & Pip say", font(BOLD, 32), acc, "mt")
     size, lines = fit(cv, q, ROUND, 820, 470, 90, 44, 1.22)
     y0 = 150 + (470 - size * 1.22 * len(lines)) / 2
     y = draw_block(cv, lines, ROUND, size, W / 2, y0, txt, 1.22, stroke)
@@ -284,9 +297,6 @@ GRID = [  # bg, grid, text, accent, author, animal fur, ear/dark fur, light
     ((250, 249, 245), (232, 228, 214), (240, 132, 96), (120, 190, 170), (140, 100, 84), (196, 172, 150), (140, 108, 84), (245, 232, 218)),
     ((246, 250, 250), (214, 234, 236), (70, 150, 200), (255, 190, 90), (90, 120, 140), (176, 204, 240), (120, 150, 200), (232, 242, 252)),
 ]
-GRID_ANIMALS = ["cat", "dog", "bear"]
-
-
 def style_grid(q, a, v):
     bg, grid, txt, acc, auth, fur, dfur, light = GRID[v % len(GRID)]
     cv = Cv(bg)
@@ -296,6 +306,7 @@ def style_grid(q, a, v):
         cv.d.line([(0, y * S), (W * S, y * S)], fill=grid, width=S * 2)
     cv.text(W / 2, 62, HANDLE, font(HAND, 40), mix(auth, bg, .3), "mt", 1 if REAL_HAND else 0)
     stroke = 1.6 if REAL_HAND else 0
+    cv.text(W / 2, 118, NAMES[GRID_ANIMALS[v % 3]] + " says", font(HAND, 50), acc, "mt", stroke)
     hi = 120 if REAL_HAND else 84
     size, lines = fit(cv, q, HAND, 800, 600, hi, 46, 1.12)
     y0 = 190 + (600 - size * 1.12 * len(lines)) / 2
@@ -329,9 +340,6 @@ BLOCK = [  # bg, dark block, bubble, text, accent tile, animal fur, ear, light
     ((236, 244, 250), (48, 74, 112), (255, 214, 120), (44, 62, 98), (250, 140, 90), (230, 200, 160), (170, 130, 90), (252, 240, 220)),
     ((250, 232, 236), (110, 56, 78), (255, 224, 140), (100, 50, 64), (240, 110, 120), (196, 176, 240), (140, 120, 200), (240, 234, 252)),
 ]
-BLOCK_ANIMALS = ["dog", "cat", "bear"]
-
-
 def style_block(q, a, v):
     bg, dark, bub, txt, tile, fur, dfur, light = BLOCK[v % len(BLOCK)]
     cv = Cv(bg)
@@ -341,6 +349,11 @@ def style_block(q, a, v):
     cv.text(W / 2, 46, HANDLE, font(BOLD, 26), mix(txt, bg, .3), "mt")
     cv.rr(84, 116, W - 84, 716, 64, bub)
     cv.poly([(440, 712), (560, 712), (500, 800)], bub)
+    tag = NAMES[BLOCK_ANIMALS[v % 3]] + " says"
+    tf = font(BOLD, 30)
+    tw = cv.length(tag, tf) + 56
+    cv.rr(120, 92, 120 + tw, 144, 26, dark)
+    cv.text(120 + tw / 2, 118, tag, tf, bg, "mm")
     size, lines = fit(cv, q, BOLD, 780, 420, 80, 40, 1.22)
     y0 = 150 + (420 - size * 1.22 * len(lines)) / 2
     y = draw_block(cv, lines, BOLD, size, W / 2, y0, txt, 1.22)
@@ -366,9 +379,20 @@ STYLES = [style_plush, style_grid, style_block]
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    for n, (q, a, _src) in enumerate(QUOTES, 1):
+    rows = []
+    for n, (q, a, src) in enumerate(QUOTES, 1):
         i = n - 1
         STYLES[i % 3](q, a, i // 3).save(os.path.join(OUT, f"day{n:02d}.png"))
+        who = "Momo & Pip" if animal_for(i) == "bear" else NAMES[animal_for(i)]
+        who_tag = "Momo" if animal_for(i) == "bear" else NAMES[animal_for(i)]
+        cap = (f"{who} say{'' if ' & ' in who else 's'}: “{q}” — {a}\n\n"
+               f"Save this for when you need it. Share it with someone who does.\n\n"
+               f"{HASH} #{who_tag}AndFriends")
+        rows.append([n, f"day{n:02d}.png", who, q, a, src, cap])
+    with open(os.path.join(OUT, "captions.csv"), "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.writer(f)
+        w.writerow(["day", "image", "character", "quote", "author", "source", "caption"])
+        w.writerows(rows)
     print("done", len(QUOTES), "| handwriting font:", os.path.basename(HAND))
 
 
