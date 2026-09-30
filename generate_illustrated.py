@@ -15,6 +15,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 from generate import QUOTES, HANDLE, HASH
+from translations_ko import KO
 
 W, H, S = 1080, 1350, 2  # S = supersampling factor
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -34,6 +35,7 @@ HAND = first(os.path.join(FONTDIR, "Caveat.ttf"), os.path.join(FONTDIR, "Patrick
              SYS + "freefont/FreeSerifBoldItalic.ttf")
 ROUND = first(os.path.join(FONTDIR, "PatrickHand.ttf"), SYS + "freefont/FreeSansBold.ttf")
 BOLD = SYS + "freefont/FreeSansBold.ttf"
+KO_FONT = os.path.join(FONTDIR, "Pretendard-SemiBold.ttf")  # Korean (Hangul) glyphs
 REAL_HAND = HAND.startswith(FONTDIR)
 REAL_ROUND = ROUND.startswith(FONTDIR)
 
@@ -271,7 +273,7 @@ PLUSH = [  # bg, fur, light, dark, text, accent
 ]
 
 
-def style_plush(q, a, v):
+def style_plush(q, a, ko, v):
     bg, fur, light, dark, txt, acc = PLUSH[v % len(PLUSH)]
     cv = Cv(bg)
     soft = mix(bg, WHITE, .55)
@@ -284,11 +286,14 @@ def style_plush(q, a, v):
     cv.text(W / 2, 62, HANDLE, font(ROUND, 28), mix(txt, bg, .35), "mt", 1 if REAL_ROUND else 0)
     stroke = 1.2 if REAL_ROUND else 0
     cv.text(W / 2, 108, "Momo & Pip say", font(BOLD, 32), acc, "mt")
-    size, lines = fit(cv, q, ROUND, 820, 470, 90, 44, 1.22)
-    y0 = 150 + (470 - size * 1.22 * len(lines)) / 2
+    size, lines = fit(cv, q, ROUND, 820, 300, 84, 40, 1.22)
+    ksz, klines = fit(cv, ko, KO_FONT, 800, 150, 40, 28, 1.35)
+    total = size * 1.22 * len(lines) + 14 + 46 + 22 + ksz * 1.35 * len(klines)
+    y0 = 150 + (610 - total) / 2
     y = draw_block(cv, lines, ROUND, size, W / 2, y0, txt, 1.22, stroke)
     cv.text(W / 2, y + 14, "- " + a, font(ROUND, 38), acc, "mt", stroke)
-    bear(cv, W / 2, 900, 135, fur, dark, light, hug=mix(fur, WHITE, .4))
+    draw_block(cv, klines, KO_FONT, ksz, W / 2, y + 14 + 46 + 22, mix(txt, bg, .15), 1.35)
+    bear(cv, W / 2, 930, 135, fur, dark, light, hug=mix(fur, WHITE, .4))
     return cv
 
 
@@ -297,7 +302,7 @@ GRID = [  # bg, grid, text, accent, author, animal fur, ear/dark fur, light
     ((250, 249, 245), (232, 228, 214), (240, 132, 96), (120, 190, 170), (140, 100, 84), (196, 172, 150), (140, 108, 84), (245, 232, 218)),
     ((246, 250, 250), (214, 234, 236), (70, 150, 200), (255, 190, 90), (90, 120, 140), (176, 204, 240), (120, 150, 200), (232, 242, 252)),
 ]
-def style_grid(q, a, v):
+def style_grid(q, a, ko, v):
     bg, grid, txt, acc, auth, fur, dfur, light = GRID[v % len(GRID)]
     cv = Cv(bg)
     for x in range(0, W + 1, 40):
@@ -308,11 +313,14 @@ def style_grid(q, a, v):
     stroke = 1.6 if REAL_HAND else 0
     cv.text(W / 2, 118, NAMES[GRID_ANIMALS[v % 3]] + " says", font(HAND, 50), acc, "mt", stroke)
     hi = 120 if REAL_HAND else 84
-    size, lines = fit(cv, q, HAND, 800, 600, hi, 46, 1.12)
-    y0 = 190 + (600 - size * 1.12 * len(lines)) / 2
+    size, lines = fit(cv, q, HAND, 800, 400, hi, 46, 1.12)
+    ksz, klines = fit(cv, ko, KO_FONT, 800, 190, 44, 30, 1.35)
+    total = size * 1.12 * len(lines) + 64 + 60 + 16 + ksz * 1.35 * len(klines)
+    y0 = 180 + (850 - total) / 2
     y = draw_block(cv, lines, HAND, size, W / 2, y0, txt, 1.12, stroke)
     swoosh(cv, W * .28, W * .72, y + 26, 10, txt, 7)
     cv.text(W / 2, y + 64, "- " + a, font(HAND, 50), auth, "mt", 1 if REAL_HAND else 0)
+    draw_block(cv, klines, KO_FONT, ksz, W / 2, y + 64 + 60 + 16, mix(auth, bg, .1), 1.35)
     sparkle(cv, 70, 230, 30, acc)
     sparkle(cv, 1012, 470, 24, acc)
     sparkle(cv, 90, 930, 20, txt)
@@ -340,31 +348,34 @@ BLOCK = [  # bg, dark block, bubble, text, accent tile, animal fur, ear, light
     ((236, 244, 250), (48, 74, 112), (255, 214, 120), (44, 62, 98), (250, 140, 90), (230, 200, 160), (170, 130, 90), (252, 240, 220)),
     ((250, 232, 236), (110, 56, 78), (255, 224, 140), (100, 50, 64), (240, 110, 120), (196, 176, 240), (140, 120, 200), (240, 234, 252)),
 ]
-def style_block(q, a, v):
+def style_block(q, a, ko, v):
     bg, dark, bub, txt, tile, fur, dfur, light = BLOCK[v % len(BLOCK)]
     cv = Cv(bg)
     cv.poly([(0, 800), (W, 560), (W, H), (0, H)], dark)
     cv.rr(880, -60, 1160, 220, 50, tile)  # corner tile
     cv.rr(-80, 300, 140, 520, 40, mix(bg, dark, .12))
     cv.text(W / 2, 46, HANDLE, font(BOLD, 26), mix(txt, bg, .3), "mt")
-    cv.rr(84, 116, W - 84, 716, 64, bub)
-    cv.poly([(440, 712), (560, 712), (500, 800)], bub)
+    cv.rr(84, 116, W - 84, 740, 64, bub)
+    cv.poly([(440, 736), (560, 736), (500, 815)], bub)
     tag = NAMES[BLOCK_ANIMALS[v % 3]] + " says"
     tf = font(BOLD, 30)
     tw = cv.length(tag, tf) + 56
     cv.rr(120, 92, 120 + tw, 144, 26, dark)
     cv.text(120 + tw / 2, 118, tag, tf, bg, "mm")
-    size, lines = fit(cv, q, BOLD, 780, 420, 80, 40, 1.22)
-    y0 = 150 + (420 - size * 1.22 * len(lines)) / 2
+    size, lines = fit(cv, q, BOLD, 780, 250, 72, 34, 1.22)
+    ksz, klines = fit(cv, ko, KO_FONT, 780, 160, 40, 30, 1.35)
+    total = size * 1.22 * len(lines) + 14 + 44 + 18 + ksz * 1.35 * len(klines)
+    y0 = 160 + (570 - total) / 2
     y = draw_block(cv, lines, BOLD, size, W / 2, y0, txt, 1.22)
     cv.text(W / 2, y + 14, "- " + a, font(BOLD, 34), mix(txt, bub, .25), "mt")
+    draw_block(cv, klines, KO_FONT, ksz, W / 2, y + 14 + 44 + 18, txt, 1.35)
     bone(cv, 170, 900, 150, light, -.5)
     bone(cv, 930, 1060, 130, light, .6)
     heart(cv, 120, 1120, 18, tile)
     sparkle(cv, 900, 900, 24, bub)
     sparkle(cv, 210, 1000, 18, bub)
     animal = BLOCK_ANIMALS[v % 3]
-    cy = 930
+    cy = 965
     if animal == "dog":
         dog(cv, W / 2, cy, 145, fur, dfur, light)
     elif animal == "cat":
@@ -382,16 +393,16 @@ def main():
     rows = []
     for n, (q, a, src) in enumerate(QUOTES, 1):
         i = n - 1
-        STYLES[i % 3](q, a, i // 3).save(os.path.join(OUT, f"day{n:02d}.png"))
+        STYLES[i % 3](q, a, KO[i], i // 3).save(os.path.join(OUT, f"day{n:02d}.png"))
         who = "Momo & Pip" if animal_for(i) == "bear" else NAMES[animal_for(i)]
         who_tag = "Momo" if animal_for(i) == "bear" else NAMES[animal_for(i)]
-        cap = (f"{who} say{'' if ' & ' in who else 's'}: “{q}” — {a}\n\n"
+        cap = (f"{who} say{'' if ' & ' in who else 's'}: “{q}” — {a}\n{KO[i]}\n\n"
                f"Save this for when you need it. Share it with someone who does.\n\n"
                f"{HASH} #{who_tag}AndFriends")
-        rows.append([n, f"day{n:02d}.png", who, q, a, src, cap])
+        rows.append([n, f"day{n:02d}.png", who, q, KO[i], a, src, cap])
     with open(os.path.join(OUT, "captions.csv"), "w", newline="", encoding="utf-8-sig") as f:
         w = csv.writer(f)
-        w.writerow(["day", "image", "character", "quote", "author", "source", "caption"])
+        w.writerow(["day", "image", "character", "quote", "quote_ko", "author", "source", "caption"])
         w.writerows(rows)
     print("done", len(QUOTES), "| handwriting font:", os.path.basename(HAND))
 

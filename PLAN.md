@@ -47,7 +47,8 @@ Day 1–30 = `day01.png`–`day30.png` (명언·등장 캐릭터·출처·캡션
 
 ## 5. 주의사항
 - 일부 명언은 고전의 **번역/의역**이라 판본마다 문구가 다릅니다(`source`에 "paraphrased" 표기). 게시 전 본인이 원문을 한 번 대조하기를 권합니다.
-- 폰트: Caveat, Patrick Hand(npm `@fontsource` 패키지에서 받아 TTF로 변환, 라이선스는 `fonts/LICENSE-*.txt`), Block 스타일은 시스템의 FreeSans Bold.
+- 한글 번역: `translations_ko.py`(제가 작성한 번역으로 공식 번역본이 아니므로 게시 전 검수 권장). 이미지 하단에 영어 명언·저자 아래로 표시되고, `captions.csv`의 `quote_ko` 열과 캡션에도 포함됩니다.
+- 폰트: Pretendard(한글, SIL OFL), Caveat, Patrick Hand(npm `@fontsource` 패키지에서 받아 TTF로 변환, 라이선스는 `fonts/LICENSE-*.txt`), Block 스타일은 시스템의 FreeSans Bold.
 - 캐릭터·배경은 코드로 직접 그린 것이며 참고 이미지(특정 제품·브랜드 이미지)를 복제하지 않았습니다. 참고 이미지와 '비슷한 분위기'만 반영했습니다.
 - 저작권: 고전·연설 명언은 짧은 인용이지만, 현대 저자 인용을 늘릴 때는 저작권·인용 범위를 확인하세요.
 
