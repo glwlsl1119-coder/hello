@@ -99,13 +99,18 @@ def render(i, quote, author, pal):
     return path
 
 HASH = "#quotes #motivation #inspiration #mindset #stoicism #wisdom #dailyquotes #selfgrowth"
-rows = []
-for n, (q, a, s) in enumerate(QUOTES, 1):
-    render(n, q, a, PALETTES[(n - 1) % len(PALETTES)])
-    cap = f"“{q}” — {a}\n\nSave this for when you need it. Share it with someone who does.\n\n{HASH}"
-    rows.append([n, f"day{n:02d}.png", q, a, s, cap])
-with open(os.path.join(OUT, "captions.csv"), "w", newline="", encoding="utf-8-sig") as f:
-    w = csv.writer(f)
-    w.writerow(["day", "image", "quote", "author", "source", "caption"])
-    w.writerows(rows)
-print("done", len(rows))
+def main():
+    rows = []
+    for n, (q, a, s) in enumerate(QUOTES, 1):
+        render(n, q, a, PALETTES[(n - 1) % len(PALETTES)])
+        cap = f"“{q}” — {a}\n\nSave this for when you need it. Share it with someone who does.\n\n{HASH}"
+        rows.append([n, f"day{n:02d}.png", q, a, s, cap])
+    with open(os.path.join(OUT, "captions.csv"), "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.writer(f)
+        w.writerow(["day", "image", "quote", "author", "source", "caption"])
+        w.writerows(rows)
+    print("done", len(rows))
+
+
+if __name__ == "__main__":
+    main()
