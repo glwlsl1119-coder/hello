@@ -57,3 +57,6 @@ pip install pillow
 python3 generate.py              # captions.csv 생성 (+ 기존 단순 타이포 버전 PNG)
 python3 generate_illustrated.py  # 캐릭터 일러스트 버전 PNG 30장 생성 (최종본, quotes/ 덮어씀)
 ```
+
+## 7. 프로필 사진
+`profile/profile_momo.png` (권장 메인), `profile_miso.png`, `profile_mochi.png` — 1080×1080 정사각형. 인스타그램이 원형으로 자르므로 캐릭터를 원 안쪽에 배치했고, `preview_*.png`는 원형 크롭 미리보기입니다. 재생성: `python3 generate_profile.py`
