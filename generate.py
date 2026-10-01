@@ -4,7 +4,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H = 1080, 1350
 OUT = os.path.join(os.path.dirname(__file__), "quotes")
-HANDLE = "@yourhandle"  # <- replace with your account name
+HANDLE = "momo&friends"  # <- replace with your account name
 F = "/usr/share/fonts/truetype/liberation/"
 QUOTE_FONT = F + "LiberationSerif-BoldItalic.ttf"
 AUTH_FONT = F + "LiberationSans-Bold.ttf"
